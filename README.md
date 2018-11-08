@@ -3,12 +3,14 @@ Protocolo P2P para compartir archivos
 ==============================
 > Pedro Ricci
 
+[Versión PDF](./Protocolo.pdf)
+
 ## Introducción
 Este protocolo tiene como objetivo permitir el intercambio de archivos a través de internet (IPv4) por medio de un modelo descentralizado, es decir, no existe una estructura Servidor-Cliente estricta.
 
 ## Hosts
 Todos los hosts que utilizan el protocolo son llamados *peers*. Estos no poseen un rol específico de cliente o servidor, sino que actúa como uno u otro dependiendo la  circunstancia. Por ejemplo, si un peer *A* solicita un archivo que se encuentra bajo posesión de un peer *B*, *A* actúa como cliente y *B* como servidor. Estos roles se intercambiarían en caso de que *B* llegase a solicitar un archivo que reside en el nodo *A*.
-Para que el protocolo sea lo más descentralizado posible, no existe un host específico que actúa como *tracker*, conectando los peers entre sí, sino que todos los peers actúan como trackers. Cada peer guarda un listado de los peers que ha descubierto en la red, el cual puede compartir a un nuevo peer, recién llegado, que no conoce a nadie más que a él. El protocolo bittorrent utiliza algo parecido llamado DHT[^dht].
+Para que el protocolo sea lo más descentralizado posible, no existe un host específico que actúa como *tracker*, conectando los peers entre sí, sino que todos los peers actúan como trackers. Cada peer guarda un listado de los peers que ha descubierto en la red, el cual puede compartir a un nuevo peer, recién llegado, que no conoce a nadie más que a él. El protocolo bittorrent utiliza algo parecido llamado DHT[1].
 
 ## Interacciones entre peers
 Cada peer posee un identificador único.
@@ -53,4 +55,4 @@ No hay peer central, pero si queremos conectarnos a una red de peers debemos con
 
 
 
-[^dht]: Descripción oficial del protocolo DHT, implementado sobre UDP http://www.bittorrent.org/beps/bep_0005.html
+[1]: Descripción oficial del protocolo DHT, implementado sobre UDP http://www.bittorrent.org/beps/bep_0005.html
