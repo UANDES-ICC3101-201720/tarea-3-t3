@@ -9,10 +9,10 @@ class P2PCommunication(object):
             # create socket? TODO
             print("no socket")
         
-        self.sd = self.sock.makefile( 'rw', 0 )
+        self.sd = self.sock.makefile('rw',buffering=None)
 
     def send(self, message):
-        self.sock.sendall(f"{message}") # TODO
+        self.sock.sendall(message) # TODO
         print("Sent...")
         return True
     
