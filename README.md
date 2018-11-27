@@ -33,21 +33,26 @@ Se utilizará el protocolo TCP para enviar mensajes entre peers/tracker.
 4  Bytes para el identificador de mensaje
 Los mensajes posibles son:
 De peer a tracker:
-- 
+- HELO: Peer solicita ser añadido a lista de peer del tracker
+- ADDF: Envia la lista de archivos que posee el peer, para ser añadida por el tracker a su listado de pares Nombre-archivo:peer_id
+- RQFS: Peer solicita archivo:peer que coincidan con string
+- QUIT: Peer avisa a tracker que se va.
+
 De peer a peer:
-- 
+- REQF: solicita a otro peer que envie el archivo de nombre determinado
 
-- RQLT: (**R**e**q**uest **L**is**t**) Solicitar lista de peers a otro peer
-- PING: Obtener respuesta para verificar que un peer aún está vivo
-- RQFS `<string>` : (**R**e**q**uest **f**iles matching **s**tring) Solicitar una lista de los archivos que posee el peer destino que hacen match con el string
-- RPFL `<# of files> <dict(filename:hash)>`: (**R**es**p**onse **F**ile **l**ist) Respuesta a RQFS. Numero de matches y dichos matches
-- RQFH `<hash of wanted file>`: (**R**e**q**est **f**ile of **h**ash) Solicitar a peer el archivo con hash determinado
-- TPHF `<peer id> <string>`: (**T**his **p**eer **h**as **f**iles matching string): Un peer puede consultar a los peers en su lista si alguno tiene un archivo con la string e informar al peer que le consultó por dicho string (hay que ver a que profundidad llegar)
-- ERRR `<error id>`: (**Err**o**r**) Informar que ocurrió un error (id's por definir)
-- ACKN `<message>`: Informar la recepción de los diversos mensajes.
+Otros:
+- ERRR: se produjo un error manejando un mensaje 
 
 
-## Conclusión
+## Implementación PoC
+- p2p.py: Utilidades que wrappean la librería sockets de python
+- peer.py: Clase Peer
+- tracker.py Clase Tracker
+
+Al ser solo un PoC tiene varias limitaciónes:
+- Los archivos a compartir no deben tener espacios y deben ser pocos, livianos y tener nombres cortos.
+- Se utiliza un buffer de 1024
 
 
 
