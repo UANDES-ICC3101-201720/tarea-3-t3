@@ -1,9 +1,10 @@
 from p2p import *
 import threading
+from os import walk
 
 class Peer(object):
 
-    def __init__(self, host, port, tracker_id):
+    def __init__(self, host, port, tracker_id, files_dir='./'):
         self.my_host = host
         self.my_port = port
         self.my_id = f"{host}:{port}"
@@ -11,18 +12,25 @@ class Peer(object):
         self.running = True # State of peer
         self.t_host, self.t_port = tracker_id.split(':')
         self.t_port = int(self.t_port)
+        self.files_dir = files_dir
+        self.files = []
+
+    def populate_files(self):
+        self.files.extend(next(walk(self.files_dir)[2])) 
 
     def connect_tracker(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(socket.gethostname())
         s.connect((self.t_host, self.t_port))
         tracker = P2PCommunication(s)
-        tracker.send(b"HELO test")
+        tracker.send(b"HELO hi")
+        tracker.send(b"ADDF listado")
         s.close()
         return True
 
     def run(self):
         # First run
+        self.populate_files()
         self.connect_tracker()
         # Loop that listens for connections
         sock = create_socket(self.my_host, self.my_port)
