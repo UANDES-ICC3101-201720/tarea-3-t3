@@ -11,7 +11,8 @@ class Tracker(object):
         self.lock = threading.Lock()
         self.running = True # State of tracker
         self.actions = {'HELO': self.action_helo,
-                        'ADDF': self.action_addf} # msg_id : action method
+                        'ADDF': self.action_addf,
+                        'QUIT': self.action_quit} # msg_id : action method
     
     def add_peer(self, peer_id):
         self.peers.append(peer_id)
@@ -26,7 +27,7 @@ class Tracker(object):
     def action_helo(self, peer_id, client, msg_content):
         ''' Helo: Add me to the peers list '''
         self.lock.acquire()
-        print("HELO action")
+        print(f"Peer {peer_id} connected.")
         # If peer_id not in peers: append peer_id
         if peer_id not in self.peers:
             self.peers.append(peer_id)
@@ -55,8 +56,10 @@ class Tracker(object):
         self.lock.acquire()
         try:
             # remove peer
-            # send 
-            pass
+            self.peers.remove(peer_id)
+            # send ACKN
+            print(self.peers)
+            
         except:
             # client.send(ERRR)
             pass
@@ -85,9 +88,9 @@ class Tracker(object):
                 # Wait for clients to connect
                 cl_sock, cl_addr = sock.accept()
                 # When a client connects, create a thread and process it TODO
-                self.process_client(cl_sock)
-                # thrd = threading.Thread(target = self.process_client, args = [cl_sock] )
-                # thrd.start()
+                # self.process_client(cl_sock)
+                thrd = threading.Thread(target = self.process_client, args = [cl_sock] )
+                thrd.start()
 
             except KeyboardInterrupt: # Ctrl + C to stop tracker
                 self.running = False
