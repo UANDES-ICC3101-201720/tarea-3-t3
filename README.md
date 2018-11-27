@@ -3,7 +3,7 @@ Protocolo P2P para compartir archivos
 ==============================
 > Pedro Ricci
 
-[Versión PDF](./Protocolo.pdf)
+[Versión PDF(old version)](./Protocolo.pdf)
 
 ## Introducción
 Este protocolo tiene como objetivo permitir el intercambio de archivos a través de internet (IPv4) por medio de un modelo semi-descentralizado, es decir, no existe una estructura Servidor-Cliente estricta.
