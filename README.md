@@ -6,28 +6,37 @@ Protocolo P2P para compartir archivos
 [Versión PDF](./Protocolo.pdf)
 
 ## Introducción
-Este protocolo tiene como objetivo permitir el intercambio de archivos a través de internet (IPv4) por medio de un modelo descentralizado, es decir, no existe una estructura Servidor-Cliente estricta.
+Este protocolo tiene como objetivo permitir el intercambio de archivos a través de internet (IPv4) por medio de un modelo semi-descentralizado, es decir, no existe una estructura Servidor-Cliente estricta.
 
 ## Hosts
-Todos los hosts que utilizan el protocolo son llamados *peers*. Estos no poseen un rol específico de cliente o servidor, sino que actúa como uno u otro dependiendo la  circunstancia. Por ejemplo, si un peer *A* solicita un archivo que se encuentra bajo posesión de un peer *B*, *A* actúa como cliente y *B* como servidor. Estos roles se intercambiarían en caso de que *B* llegase a solicitar un archivo que reside en el nodo *A*.
-Para que el protocolo sea lo más descentralizado posible, no existe un host específico que actúa como *tracker*, conectando los peers entre sí, sino que todos los peers actúan como trackers. Cada peer guarda un listado de los peers que ha descubierto en la red, el cual puede compartir a un nuevo peer, recién llegado, que no conoce a nadie más que a él. El protocolo bittorrent utiliza algo parecido llamado DHT[1].
+Existen dos tipos de host:
+- Peer: Hosts que poseen los archivos a compartir. Intercambian archivos entre ellos gracias a la información proporcionado por el Tracker
+- Tracker: Host específico central que mantiene una lista de los peers conocidos y los archivos que cada uno de ellos posee. Si un peer solicita un archivo, le entrega la información necesaria para que se contacte con el peer que posee dicho archivo
+
 
 ## Interacciones entre peers
-Cada peer posee un identificador único.
+Cada peer posee un identificador único de la forma: ```<ip o hostname>:<puerto>```.
 Los peers pueden:
-- Hacer ping para verificar el estado de determinado peer
-- Solicitar el listado de peers de otro peer, para agregar a su lista
-- Preguntar a otro peer si posee archivos cuyos nombres concuerden con un string
-- Responder a la consulta de archivos (afirmativa o negativa), junto a un arreglo de los archivos que hacen match con el string solicitado y sus respectivos hash
-- Solicitar el envío de un archivo en base a su hash
-- 
+- Conectarse con un tracker
+- Desconectarse del tracker
+- Solicitar archivos que coincidan con un string al tracker
+- Solicitar un archivo a partir de su nombre a otro peer
+El tracker puede:
+- Mantener una lista de peers
+- Mantener una lista de archivos y sus respectivos dueños
+
 
 ![diagram](https://snag.gy/CmQt4o.jpg)
 
 ## Mensajes
-Se utilizará TCP.
+Se utilizará el protocolo TCP para enviar mensajes entre peers/tracker.
 4  Bytes para el identificador de mensaje
 Los mensajes posibles son:
+De peer a tracker:
+- 
+De peer a peer:
+- 
+
 - RQLT: (**R**e**q**uest **L**is**t**) Solicitar lista de peers a otro peer
 - PING: Obtener respuesta para verificar que un peer aún está vivo
 - RQFS `<string>` : (**R**e**q**uest **f**iles matching **s**tring) Solicitar una lista de los archivos que posee el peer destino que hacen match con el string
@@ -37,12 +46,8 @@ Los mensajes posibles son:
 - ERRR `<error id>`: (**Err**o**r**) Informar que ocurrió un error (id's por definir)
 - ACKN `<message>`: Informar la recepción de los diversos mensajes.
 
-## Otros
-Se puede "encadenar" búsquedas. Si se envía RQFS a un peer, este puede solicitar el listado de peers del emisor y reenviar el mensaje RQFS a los peers que posee él pero no el emisor. Esto con una profundidad y mecanismo por determinar (para evitar loops infinitos)
 
 ## Conclusión
-Solo existen peers. Estos son clientes y servidor. 
-No hay peer central, pero si queremos conectarnos a una red de peers debemos conocer por lo menos uno y conectarnos directamente. Luego copiamos su lista de peers conectados.
 
 
 
