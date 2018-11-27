@@ -14,6 +14,7 @@ class Peer(object):
 
     def connect_tracker(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print(socket.gethostname())
         s.connect((self.t_host, self.t_port))
         tracker = P2PCommunication(s)
         tracker.send(b"HELO test")
@@ -52,5 +53,5 @@ class Peer(object):
 
 
 if __name__=='__main__':
-    p1 = Peer('172.0.0.1', 9998, '172.0.0.1:9999')
+    p1 = Peer('localhost', 9997, 'localhost:9999')
     p1.run()
