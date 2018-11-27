@@ -1,5 +1,6 @@
 from p2p import *
 import threading
+import traceback
 
 class Tracker(object):
 
@@ -9,7 +10,8 @@ class Tracker(object):
         self.files = {} # filename : peer_id
         self.lock = threading.Lock()
         self.running = True # State of tracker
-        self.actions = {} # msg_id : action method
+        self.actions = {'HELO': self.action_helo,
+                        'ADDF': self.action_addf} # msg_id : action method
     
     def add_peer(self, peer_id):
         self.peers.append(peer_id)
@@ -17,18 +19,28 @@ class Tracker(object):
     def remove_peer(self, peer_id):
         self.peers.remove(peer_id)
     
-    def action_addf(self, client, msg_content):
+    def action_addf(self, peer_id, client, msg_content):
         ''' Add files sent by peer to the files dict '''
         
         pass
-    def action_helo(self, client, msg_content):
+    def action_helo(self, peer_id, client, msg_content):
         ''' Helo: Add me to the peers list '''
+        self.lock.acquire()
+        print("HELO action")
         # If peer_id not in peers: append peer_id
+        if peer_id not in self.peers:
+            self.peers.append(peer_id)
+            #send ack
+        else:
+            #send ack already
+            pass
         # send acknowladge
         # send error
-        pass
+        self.lock.release()
+        print(self.peers)
+        
 
-    def action_rqfs(self, client, msg_content):
+    def action_rqfs(self, peer_id, client, msg_content):
         ''' Request file matching string ''' 
         self.lock.acquire()
         # Check if string in self.files
@@ -38,7 +50,7 @@ class Tracker(object):
         self.lock.release()
         pass
     
-    def action_quit(self, client, msg_content):
+    def action_quit(self, peer_id, client, msg_content):
         ''' Quit: remove peer form self.peers ''' 
         self.lock.acquire()
         try:
@@ -60,7 +72,7 @@ class Tracker(object):
         msg_id, msg_content = client.recv()
         print(msg_id, msg_content)
         if msg_id in self.actions:
-            actions[msg_id](client, msg_content)
+            self.actions[msg_id](peer_id, client, msg_content)
         
         client.close()
 
@@ -83,6 +95,7 @@ class Tracker(object):
                 continue
             except:
                 print("Error")
+                traceback.print_exc()
                 continue
 
     
