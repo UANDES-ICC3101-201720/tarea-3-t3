@@ -26,7 +26,7 @@ El tracker puede:
 - Mantener una lista de archivos y sus respectivos dueños
 
 
-![diagram](https://snag.gy/CmQt4o.jpg)
+![diagram](https://snag.gy/bpFEwR.jpg)
 
 ## Mensajes
 Se utilizará el protocolo TCP para enviar mensajes entre peers/tracker.
